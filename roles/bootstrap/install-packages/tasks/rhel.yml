@@ -6,22 +6,22 @@
     - ansible_os_family == "RedHat"
     - ansible_distribution != "Fedora"
 
-- name: install the 'Development tools' package group
-  yum:
-    name: "@Development tools"
-  when: ansible_os_family == "RedHat"
+#- name: install the 'Development tools' package group
+#  yum:
+#    name: "@Development tools"
+#  when: ansible_os_family == "RedHat"
 
 - name: install pip
   yum:
     name: python-pip
   when: ansible_os_family == "RedHat"
 
-- name: install python-netaddr on Ansible host
-  package:
-    name: python-netaddr
-  delegate_to: localhost
-  become: yes
-  when: ansible_os_family == "RedHat"
+#- name: install python-netaddr on Ansible host
+#  package:
+#    name: python-netaddr
+#  delegate_to: localhost
+#  become: yes
+#  when: ansible_os_family == "RedHat"
 
 - name: update all packages on Red Hat OS family
   yum:

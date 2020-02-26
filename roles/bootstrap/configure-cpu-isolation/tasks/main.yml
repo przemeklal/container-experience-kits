@@ -34,11 +34,13 @@
     - ansible_os_family == "Debian"
     - isolcpus_parameters.changed
 
-# TODO: make it work with EFI
 - name: update grub.cfg
-  command: grub2-mkconfig -o /boot/grub2/grub.cfg
+  command: "[ -f {{ item }} ] && grub2-mkconfig -o {{ item }}"
   notify:
    - reboot server
   when:
     - ansible_os_family == "RedHat"
     - isolcpus_parameters.changed
+  with_items:
+    - /etc/grub2.cfg
+    - /etc/grub2-efi.cfg

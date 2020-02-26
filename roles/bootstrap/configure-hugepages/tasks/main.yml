@@ -47,11 +47,13 @@
     - ansible_os_family == "Debian"
     - hugepages_parameters.changed
 
-# TODO: add support for EFI
-- name: update grub.cfg on RHEL-based distro
-  command: grub2-mkconfig -o /boot/grub2/grub.cfg
+- name: update grub.cfg
+  command: "[ -f {{ item }} ] && grub2-mkconfig -o {{ item }}"
   notify:
    - reboot server
   when:
     - ansible_os_family == "RedHat"
     - hugepages_parameters.changed
+  with_items:
+    - /etc/grub2.cfg
+    - /etc/grub2-efi.cfg
