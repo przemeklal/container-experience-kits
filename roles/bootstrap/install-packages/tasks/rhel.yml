@@ -1,4 +1,16 @@
 ---
+- name: enable PowerTools repository on CentOS 8
+  shell: "yum config-manager --set-enabled PowerTools"
+  when:
+    - ansible_distribution == "CentOS"
+    - ansible_distribution_version >= '8'
+
+- name: enable CodeReady Linux Builder repository for RHEL 8
+  shell: subscription-manager repos --enable=codeready-builder-for-rhel-8-x86_64-rpms
+  when:
+    - ansible_distribution == "RedHat"
+    - ansible_distribution_version >= '8'
+
 - name: install epel-release
   yum:
     name: epel-release
@@ -9,12 +21,22 @@
 - name: install the 'Development tools' package group
   yum:
     name: "@Development tools"
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_os_family == "RedHat"
 
 - name: install pip
   yum:
     name: python-pip
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_distribution in ["RedHat", "CentOS"]
+    - ansible_distribution_version < '8'
+
+- name: install pip
+  yum:
+    name: python3-pip
+  when:
+    - ansible_distribution in ["RedHat", "CentOS"]
+    - ansible_distribution_version >= '8'
 
 - name: install netaddr on Ansible host
   pip:
@@ -42,8 +64,8 @@
     - ansible_os_family == "RedHat"
     - update_kernel | default(true)
 
-#note(przemeklal): fixes issue with missing selinux in packet.net CentOS images
-- name: ensure selinux is installed
+#note(przemeklal): fixes issue with missing selinux in packet.net CentOS 7 images
+- name: ensure selinux is installed on CentOS/RHEL 7
   yum:
     name:
     - policycoreutils
@@ -55,4 +77,6 @@
     - setools-console
     - shtool
     state: present
-  when: ansible_os_family == "RedHat"
+  when:
+    - ansible_distribution in ["RedHat", "CentOS"]
+    - ansible_distribution_version < '8'

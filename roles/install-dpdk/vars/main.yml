@@ -13,3 +13,4 @@ install_dependencies:
     - libpcap-devel
     - kernel-devel
     - "@Development tools"
+    - elfutils-libelf-devel
