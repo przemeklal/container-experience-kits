@@ -33,6 +33,8 @@
   when:
     - force_nic_drivers_update | default(false) | bool
     - mgmt_interface_driver.stdout != i40evf_drivers_name
+    - not (ansible_distribution in ["RedHat", "CentOS"] and ansible_distribution_version >= '8') # always skip on RHEL/CentOS 8+
+
 
 # update iavf drivers
 - include: iavf.yml

@@ -15,6 +15,8 @@ install_dependencies:
   Debian:
     - build-essential
     - linux-headers-{{ ansible_kernel }}
+    - libelf-dev
   RedHat:
     - gcc
-    - kernel-devel
+    - kernel-devel-{{ ansible_kernel }}
+    - elfutils-libelf-devel
